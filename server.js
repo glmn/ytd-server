@@ -8,6 +8,6 @@ server.listen(3000);
 io.on('connection', function(socket){
 	logger.log('Connected');
 	socket.on('disconnect', function(socket){
-		Logger.log('Disconnected')
+		logger.log('Disconnected');
 	})
 })
