@@ -22,6 +22,7 @@ db.on('open', function(){
 				.then(function(hotel){
 					return Hotel.setStatus(hotel,Hotel.RESERVED);
 				})
+				.catch(logger.warn)
 				.then(function(hotel){
 					socket.emit('hotel-response', hotel);
 				})
@@ -49,27 +50,36 @@ db.on('open', function(){
 	})
 });
 
-function Hotel(){
-	const NOT_USED = 0;
-	const RESERVED = 1;
-	const COMPLETED = 2;
-	const ERROR = 3;
-}
+class Hotel {
 
-Hotel.prototype.getNew = function(){
-	return new Promise(function(resolve, reject){
-		Db.get("SELECT * FROM hotels WHERE photos_count >= 5 AND status = 0 ORDER BY ID DESC LIMIT 1", null, function(err,hotel){
-			if(err) reject(err);
-			resolve(hotel);
-		});
-	})
-}
+	static get NOT_USED(){
+		return 0;
+	};
+	static get RESERVED(){
+		return 1;
+	};
+	static get COMPLETED(){
+		return 2;
+	};
+	static get ERROR(){
+		return 3;
+	};
 
-Hotel.prototype.setStatus = function(hotel,status){
-	return new Promise(function(resolve, reject){
-		Db.run("UPDATE hotels SET status = ? WHERE id = ?", status, hotel.id, function(err){
-			if(err) reject(err);
-			resolve(hotel);
-		});
-	})
+	static getNew(){
+		return new Promise(function(resolve, reject){
+			db.get("SELECT * FROM hotels WHERE photos_count >= 5 AND status = 0 ORDER BY ID DESC LIMIT 1", function(err,hotel){
+				if(err) reject(err);
+				resolve(hotel);
+			});
+		})
+	}
+
+	static setStatus(hotel,status){
+		return new Promise(function(resolve, reject){
+			db.run("UPDATE hotels SET status = ? WHERE id = ?", status, hotel.id, function(err){
+				if(err) reject(err);
+				resolve(hotel);
+			});
+		})
+	}
 }
