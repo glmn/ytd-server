@@ -7,6 +7,7 @@ var app = require('express')(),
 server.listen(3000);
 
 var db = new sqlite.Database('hotels.db', sqlite.OPEN_READWRITE);
+
 db.on('open', function(){
 	io.on('connection', function(socket){
 		logger.log('Connected');
@@ -35,3 +36,14 @@ db.on('open', function(){
 		})
 	})
 });
+
+
+function getHotelData(offset = 0)
+{
+	return new Promise(function(resolve, reject){
+		Db.get("SELECT * FROM hotels WHERE country_name = 'France' AND location_name = 'Paris' AND photos_count >= 5 ORDER BY ID DESC LIMIT ?,1", offset, function(err,hotel){
+			if(err) reject(err);
+			resolve(hotel);
+		});
+	})
+}
