@@ -50,9 +50,9 @@ db.on('open', function(){
 });
 
 function Hotel(){
-	const NOT_USED = 0,
-	const RESERVED = 1,
-	const COMPLETED = 2,
+	const NOT_USED = 0;
+	const RESERVED = 1;
+	const COMPLETED = 2;
 	const ERROR = 3;
 }
 
