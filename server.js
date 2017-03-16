@@ -2,7 +2,7 @@ var app = require('express')(),
 	server = require('http').Server(app),
 	io = require('socket.io')(server),
 	sqlite = require('sqlite3').verbose(),
-	logger = require('bug-killer');
+	debug = require('bug-killer');
 
 server.listen(3000);
 
@@ -10,10 +10,7 @@ var db = new sqlite.Database('hotels.db', sqlite.OPEN_READWRITE);
 
 db.on('open', function(){
 	io.on('connection', function(socket){
-		logger.log('Connected');
-
-
-
+		debug.log('Connected');
 
 		//Workers
 		socket.on('hotel-request', function(){
@@ -22,14 +19,11 @@ db.on('open', function(){
 				.then(function(hotel){
 					return Hotel.setStatus(hotel,Hotel.RESERVED);
 				})
-				.catch(logger.warn)
+				.catch(debug.warn)
 				.then(function(hotel){
 					socket.emit('hotel-response', hotel);
 				})
 		})
-
-
-
 
 		//Admin
 		socket.on('nodes-request', function(){
@@ -45,7 +39,7 @@ db.on('open', function(){
 
 
 		socket.on('disconnect', function(socket){
-			logger.log('Disconnected');
+			debug.log('Disconnected');
 		})
 	})
 });
