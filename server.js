@@ -6,29 +6,32 @@ var app = require('express')(),
 
 server.listen(3000);
 
-io.on('connection', function(socket){
-	logger.log('Connected');
+var db = new sqlite.Database('hotels.db', sqlite.OPEN_READWRITE);
+db.on('open', function(){
+	io.on('connection', function(socket){
+		logger.log('Connected');
 
 
-	//Workers
-	socket.on('hotel-request', function(){
+		//Workers
+		socket.on('hotel-request', function(){
 
+		})
+
+		//Admin
+		socket.on('nodes-request', function(){
+			var data = {
+				id: 1,
+				data: 'test',
+				uploaded: 0,
+				status: 'Making video'
+			}
+			io.emit('nodes-response', data);
+		})
+
+
+
+		socket.on('disconnect', function(socket){
+			logger.log('Disconnected');
+		})
 	})
-
-	//Admin panel
-	socket.on('nodes-request', function(){
-		var data = {
-			id: 1,
-			data: 'test',
-			uploaded: 0,
-			status: 'Making video'
-		}
-		io.emit('nodes-response', data);
-	})
-
-
-
-	socket.on('disconnect', function(socket){
-		logger.log('Disconnected');
-	})
-})
+});
