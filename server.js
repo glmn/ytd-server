@@ -1,6 +1,7 @@
 var app = require('express')(),
 	server = require('http').Server(app),
 	io = require('socket.io')(server),
+	sqlite = require('sqlite3').verbose(),
 	logger = require('bug-killer');
 
 server.listen(3000);
@@ -8,6 +9,13 @@ server.listen(3000);
 io.on('connection', function(socket){
 	logger.log('Connected');
 
+
+	//Workers
+	socket.on('hotel-request', function(){
+
+	})
+
+	//Admin panel
 	socket.on('nodes-request', function(){
 		var data = {
 			id: 1,
