@@ -13,6 +13,7 @@ db.on('open', function(){
 		debug.log('Connected');
 
 		//Workers
+		
 		socket.on('hotel-request', function(){
 			Promise.resolve()
 				.then(Hotel.getNew)
@@ -25,7 +26,10 @@ db.on('open', function(){
 				})
 		})
 
+
+
 		//Admin
+		
 		socket.on('nodes-request', function(){
 			var data = {
 				id: 1,
@@ -46,18 +50,10 @@ db.on('open', function(){
 
 class Hotel {
 
-	static get NOT_USED(){
-		return 0;
-	};
-	static get RESERVED(){
-		return 1;
-	};
-	static get COMPLETED(){
-		return 2;
-	};
-	static get ERROR(){
-		return 3;
-	};
+	static get NOT_USED(){ return 0 };
+	static get RESERVED(){ return 1 };
+	static get COMPLETED(){ return 2 };
+	static get ERROR(){ return 3 };
 
 	static getNew(){
 		return new Promise(function(resolve, reject){
