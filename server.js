@@ -8,20 +8,20 @@ server.listen(3000);
 
 var db = new sqlite.Database('hotels.db', sqlite.OPEN_READWRITE);
 
-db.on('open', function(){
-	io.on('connection', function(socket){
+db.on('open', () => {
+	io.on('connection', (socket) => {
 		debug.log('Connected');
 
 		//Workers
 		
-		socket.on('hotel-request', function(){
+		socket.on('hotel-request', () => {
 			Promise.resolve()
 				.then(Hotel.getNew)
 				.then(function(hotel){
 					return Hotel.setStatus(hotel,Hotel.RESERVED);
 				})
 				.catch(debug.warn)
-				.then(function(hotel){
+				.then((hotel) => {
 					socket.emit('hotel-response', hotel);
 				})
 		})
@@ -34,7 +34,7 @@ db.on('open', function(){
 
 		//Admin
 		
-		socket.on('nodes-request', function(){
+		socket.on('nodes-request', () => {
 			var data = {
 				id: 1,
 				data: 'test',
@@ -46,7 +46,7 @@ db.on('open', function(){
 
 
 
-		socket.on('disconnect', function(socket){
+		socket.on('disconnect', (socket) => {
 			debug.log('Disconnected');
 		})
 	})
@@ -60,8 +60,8 @@ class Hotel {
 	static get ERROR(){ return 3 };
 
 	static getNew(){
-		return new Promise(function(resolve, reject){
-			db.get("SELECT * FROM hotels WHERE photos_count >= 5 AND status = 0 ORDER BY ID DESC LIMIT 1", function(err,hotel){
+		return new Promise((resolve, reject) => {
+			db.get("SELECT * FROM hotels WHERE photos_count >= 5 AND status = 0 ORDER BY ID DESC LIMIT 1", (err,hotel) => {
 				if(err) reject(err);
 				resolve(hotel);
 			});
@@ -69,8 +69,8 @@ class Hotel {
 	}
 
 	static setStatus(hotel,status){
-		return new Promise(function(resolve, reject){
-			db.run("UPDATE hotels SET status = ? WHERE id = ?", status, hotel.id, function(err){
+		return new Promise((resolve, reject) => {
+			db.run("UPDATE hotels SET status = ? WHERE id = ?", status, hotel.id, (err) => {
 				if(err) reject(err);
 				resolve(hotel);
 			});
