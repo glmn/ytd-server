@@ -26,6 +26,10 @@ db.on('open', function(){
 				})
 		})
 
+		socket.on('worker:update-status', (status) => {
+			debug.log(status);
+		})
+
 
 
 		//Admin
