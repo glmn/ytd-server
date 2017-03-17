@@ -16,7 +16,7 @@ db.on('open', () => {
 
 		//Workers
 		
-		socket.on('hotel-request', () => {
+		socket.on('worker:hotel-request', () => {
 			Promise.resolve()
 				.then(Hotel.getNew)
 				.then(function(hotel){
@@ -24,7 +24,7 @@ db.on('open', () => {
 				})
 				.catch(debug.warn)
 				.then((hotel) => {
-					socket.emit('hotel-response', hotel);
+					socket.emit('worker:hotel-response', hotel);
 				})
 		})
 
