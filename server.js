@@ -1,3 +1,5 @@
+"use strict";
+
 var app = require('express')(),
 	server = require('http').Server(app),
 	io = require('socket.io')(server),
