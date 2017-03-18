@@ -1,5 +1,5 @@
 # YouTube Doorway - Server 
-[![Build Status](https://travis-ci.org/glmn/ytd-worker.svg?branch=master)](https://travis-ci.org/glmn/ytd-server)
+[![Build Status](https://travis-ci.org/glmn/ytd-server.svg?branch=master)](https://travis-ci.org/glmn/ytd-server)
 
 ### This repo is a part of `ytd` project
 
