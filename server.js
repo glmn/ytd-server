@@ -28,10 +28,12 @@ db.on('open', () => {
 				})
 		})
 
-		socket.on('worker:hotel-status-complete', (hotel) => {
-			Promise.resolve(hotel)
-				.then((hotel) => {
-					return Hotel.setStatus(hotel,Hotel.COMPLETED);
+		socket.on('worker:hotel-status-complete]', ([hotel,video]) => {
+			Promise.resolve([hotel,video])
+				.then(([hotel,video]) => {
+					Hotel.setVideoId(hotel,video).then((hotel) => {
+						Hotel.setStatus(hotel,Hotel.COMPLETED);
+					})
 				})
 		})
 
@@ -68,7 +70,8 @@ class Hotel {
 	static get COMPLETED(){ return 2 };
 	static get ERROR(){ return 3 };
 
-	static getNew(){
+	static getNew()
+	{
 		return new Promise((resolve, reject) => {
 			db.get("SELECT * FROM hotels WHERE photos_count >= 5 AND status = 0 ORDER BY ID DESC LIMIT 1", (err,hotel) => {
 				if(err) reject(err);
@@ -77,10 +80,21 @@ class Hotel {
 		})
 	}
 
-	static setStatus(hotel,status){
+	static setStatus(hotel,status)
+	{
 		return new Promise((resolve, reject) => {
 			db.run("UPDATE hotels SET status = ? WHERE id = ?", status, hotel.id, (err) => {
 				if(err) reject(err);
+				resolve(hotel);
+			});
+		})
+	}
+
+	static setVideoId(hotel,video)
+	{
+		return new Promise((resolve,reject) => {
+			db.run("UPDATE hotels SET videoid = ? WHERE id = ?", video.id, hotel.id, (err) => {
+				if(err) reject(err)
 				resolve(hotel);
 			});
 		})
