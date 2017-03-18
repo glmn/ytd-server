@@ -19,12 +19,19 @@ db.on('open', () => {
 		socket.on('worker:hotel-request', () => {
 			Promise.resolve()
 				.then(Hotel.getNew)
-				.then(function(hotel){
+				.then((hotel) => {
 					return Hotel.setStatus(hotel,Hotel.RESERVED);
 				})
 				.catch(debug.warn)
 				.then((hotel) => {
 					socket.emit('worker:hotel-response', hotel);
+				})
+		})
+
+		socket.on('worker:hotel-status-complete', (hotel) => {
+			Promise.resolve(hotel)
+				.then((hotel) => {
+					return Hotel.setStatus(hotel,Hotel.COMPLETED);
 				})
 		})
 
