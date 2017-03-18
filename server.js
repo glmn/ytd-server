@@ -15,7 +15,6 @@ db.on('open', () => {
 		debug.log('Connected');
 
 		//Workers
-		
 		socket.on('worker:hotel-request', () => {
 			Promise.resolve()
 				.then(Hotel.getNew)
@@ -44,15 +43,14 @@ db.on('open', () => {
 
 
 		//Admin
-		
-		socket.on('nodes-request', () => {
+		socket.on('admin:workers-request', () => {
 			var data = {
 				id: 1,
 				data: 'test',
 				uploaded: 0,
 				status: 'Making video'
 			}
-			io.emit('nodes-response', data);
+			io.emit('admin:workers-response', data);
 		})
 
 
