@@ -27,7 +27,7 @@ db.on('open', () => {
 				})
 		})
 
-		socket.on('worker:hotel-status-complete]', ([hotel,video]) => {
+		socket.on('worker:hotel-status-complete', ([hotel,video]) => {
 			Promise.resolve([hotel,video])
 				.then(([hotel,video]) => {
 					Hotel.setVideoId(hotel,video).then((hotel) => {
