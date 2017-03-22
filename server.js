@@ -1,4 +1,4 @@
-a"use strict";
+"use strict";
 
 var app = require('express')(),
 	server = require('http').Server(app),
@@ -17,7 +17,9 @@ db.on('open', () => {
 		
 		//Workers
 		socket.on('worker:hello', (worker) => {
-			workers.push(worker)
+			if(socket.workerId === undefined){
+				socket.workerId = workers.push(worker) - 1;
+			}
 		});
 
 		socket.on('worker:hotel-request', () => {
@@ -26,7 +28,7 @@ db.on('open', () => {
 				.then((hotel) => {
 					return Hotel.setStatus(hotel,Hotel.RESERVED);
 				})
-				.catch(debug.warn)
+				.catch(debug.error)
 				.then((hotel) => {
 					socket.emit('worker:hotel-response', hotel);
 				})
@@ -41,25 +43,20 @@ db.on('open', () => {
 				})
 		})
 
-		socket.on('worker:update-status', (status) => {
-			debug.log(status);
+		socket.on('worker:update-status', (worker) => {
+			workers[socket.workerId] = worker
+			debug.log(workers);
 		})
 
 
 
 		//Admin
 		socket.on('admin:workers-request', () => {
-			var data = {
-				id: 1,
-				data: 'test',
-				uploaded: 0,
-				status: 'Making video'
-			}
-			io.emit('admin:workers-response', data);
+			io.emit('admin:workers-response', workers);
 		})
 
 
-
+		//Disconnect
 		socket.on('disconnect', (socket) => {
 			debug.log('Disconnected');
 		})
