@@ -1,4 +1,4 @@
-"use strict";
+a"use strict";
 
 var app = require('express')(),
 	server = require('http').Server(app),
@@ -6,15 +6,20 @@ var app = require('express')(),
 	sqlite = require('sqlite3').verbose(),
 	debug = require('bug-killer');
 
+var workers = [];
+
 server.listen(3000);
 
 var db = new sqlite.Database('hotels.db', sqlite.OPEN_READWRITE);
 
 db.on('open', () => {
 	io.on('connection', (socket) => {
-		debug.log('Connected');
-
+		
 		//Workers
+		socket.on('worker:hello', (worker) => {
+			workers.push(worker)
+		});
+
 		socket.on('worker:hotel-request', () => {
 			Promise.resolve()
 				.then(Hotel.getNew)
