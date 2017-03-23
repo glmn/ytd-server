@@ -44,7 +44,8 @@ db.on('open', () => {
 		})
 
 		socket.on('worker:update-status', (worker) => {
-			workers[socket.workerId] = worker
+			workers[socket.workerId] = worker;
+			io.emit('admin:workers-response', workers);
 			debug.log(workers);
 		})
 
