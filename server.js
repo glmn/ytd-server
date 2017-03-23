@@ -59,6 +59,8 @@ db.on('open', () => {
 
 		//Disconnect
 		socket.on('disconnect', (socket) => {
+			workers.splice(socket.workerId,1);
+			io.emit('admin:workers-response', workers);
 			debug.log('Disconnected');
 		})
 	})
