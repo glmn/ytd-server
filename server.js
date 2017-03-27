@@ -18,6 +18,7 @@ db.on('open', () => {
 		//Workers
 		socket.on('worker:hello', (worker) => {
 			if(socket.workerId === undefined){
+				worker.droplet.ip = socket.request.connection.remoteAddress;
 				socket.workerId = workers.push(worker) - 1;
 			}
 		});
